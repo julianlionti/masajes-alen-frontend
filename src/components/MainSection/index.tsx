@@ -11,7 +11,7 @@ import {
 } from "./MainSecionElements";
 import Video from "../../assets/videos/video2.mp4";
 import { useState } from "react";
-import { Button } from "../ButtonElement";
+import { ButtonS } from "../ButtonElement";
 
 export const MainSection = () => {
   const [hover, setHover] = useState(false);
@@ -30,9 +30,13 @@ export const MainSection = () => {
           onMouseLeave={() => setHover(false)}
           onMouseEnter={() => setHover(true)}
         >
-          <Button to="turns" primary dark>
+          <ButtonS
+            btnProps={{ to: "turns", smooth: true, duration: 500 }}
+            primary
+            dark
+          >
             Pedir turno {hover ? <ArrowForward /> : <ArrowRight />}
-          </Button>
+          </ButtonS>
         </MainBtnWrapper>
       </MainContent>
     </MainRoot>

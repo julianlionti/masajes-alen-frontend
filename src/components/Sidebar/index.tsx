@@ -20,7 +20,14 @@ export const Sidebar = () => {
       <SidebarWrapper>
         <SidebarMenu>
           {menus.map((e) => (
-            <SidebarLinks key={e.route} to={e.route} onClick={toggleSidebar}>
+            <SidebarLinks
+              key={e.route}
+              smooth
+              spy
+              duration={500}
+              to={e.route}
+              onClick={toggleSidebar}
+            >
               {e.title}
             </SidebarLinks>
           ))}

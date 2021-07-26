@@ -1,9 +1,11 @@
 import { Link as LinkR } from "react-router-dom";
 import { Link as LinkS } from "react-scroll";
 import styled from "styled-components";
+import { primaryColor } from "../ButtonElement";
 
-export const Nav = styled.nav`
-  background-color: #000;
+type NavProps = { scrollNav?: boolean };
+export const Nav = styled.nav<NavProps>`
+  background-color: ${({ scrollNav }) => (scrollNav ? "#000" : "transparent")};
   height: 80px;
   margin-top: -80px;
   display: flex;
@@ -13,10 +15,7 @@ export const Nav = styled.nav`
   position: sticky;
   top: 0;
   z-index: 10;
-
-  @media screen and (max-width: 960px) {
-    transition: 0.8s all ease;
-  }
+  transition: 0.8s all ease;
 `;
 
 export const NavbarContainer = styled.div`
@@ -82,7 +81,7 @@ export const NavLinks = styled(LinkS)`
   cursor: pointer;
 
   &.active {
-    border-bottom: 3px solid #01bf71;
+    border-bottom: ${`3px solid ${primaryColor}`};
   }
 `;
 
@@ -97,7 +96,7 @@ export const NavBtn = styled.nav`
 
 export const NavBtnLink = styled(LinkR)`
   border-radius: 50px;
-  background: #01bf71;
+  background: ${primaryColor};
   white-space: nowrap;
   padding: 10px 22px;
   color: #010606;
