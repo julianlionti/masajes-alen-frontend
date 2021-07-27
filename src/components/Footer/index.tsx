@@ -15,7 +15,7 @@ import {
   WebsiteRights,
 } from "./FotterElements";
 
-export const Footer = () => {
+export const Footer = (): JSX.Element => {
   return (
     <FooterRoot>
       <FooterWrap>

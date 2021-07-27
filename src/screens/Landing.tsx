@@ -50,14 +50,13 @@ const services = createServices([
   },
 ]);
 
-export const Landing = () => {
+const Landing = (): JSX.Element => {
   return (
     <NavAndSide
       menus={[
         { route: "services", title: "Servicios" },
         { route: "turns", title: "Turnos" },
         { route: "map", title: "Ubicación" },
-        { route: "sigunup", title: "Registrarse" },
       ]}
     >
       <MainSection />
@@ -69,3 +68,5 @@ export const Landing = () => {
     </NavAndSide>
   );
 };
+
+export default Landing;

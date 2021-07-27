@@ -11,12 +11,12 @@ import {
 } from "./NavbarElements";
 import { IconContext } from "react-icons/lib";
 import { FaBars } from "react-icons/fa";
-import { useNavAndSide } from "../../utils/NavAndSideProvider";
+import { useNavAndSide } from "../../providers/NavAndSideProvider";
 import { animateScroll } from "react-scroll";
 import { useState } from "react";
 import { useEffect } from "react";
 
-export const Navbar = () => {
+export const Navbar = (): JSX.Element => {
   const { menus, toggleSidebar } = useNavAndSide();
   const [scrollNav, setScrollNav] = useState(false);
 

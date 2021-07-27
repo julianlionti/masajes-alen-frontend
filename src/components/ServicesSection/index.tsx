@@ -14,10 +14,11 @@ interface ServicesProps {
   subtitle: string;
 }
 
-export const createServices = (props: ServicesProps[]) => props;
+export const createServices = (props: ServicesProps[]): ServicesProps[] =>
+  props;
 
 type Props = { services: ServicesProps[] };
-export const ServicesSection = (props: Props) => {
+export const ServicesSection = (props: Props): JSX.Element => {
   const { services } = props;
   return (
     <ServicesRoot id="services">

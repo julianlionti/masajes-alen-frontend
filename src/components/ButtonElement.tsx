@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Link as LinkR, LinkProps as LinkPropsR } from "react-router-dom";
 import { Link as LinkS, LinkProps as LinkPropsS } from "react-scroll";
@@ -34,7 +35,7 @@ const StyledBtn = styled.div<ButtonProps>`
 
 export const ButtonR = (
   props: React.PropsWithChildren<ButtonProps & { btnProps: LinkPropsR }>
-) => {
+): JSX.Element => {
   const { children, btnProps, ...rest } = props;
   return (
     <LinkR {...(btnProps as any)} style={{ textDecoration: "none" }}>
@@ -45,7 +46,7 @@ export const ButtonR = (
 
 export const ButtonS = (
   props: React.PropsWithChildren<ButtonProps & { btnProps: LinkPropsS }>
-) => {
+): JSX.Element => {
   const { children, btnProps, ...rest } = props;
   return (
     <LinkS {...(btnProps as any)} style={{ textDecoration: "none" }}>

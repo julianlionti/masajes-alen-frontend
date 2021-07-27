@@ -1,5 +1,7 @@
 import { Turns } from "../components/Turns";
 
-export const TurnsScreen = () => {
+const TurnsScreen = (): JSX.Element => {
   return <Turns />;
 };
+
+export default TurnsScreen;

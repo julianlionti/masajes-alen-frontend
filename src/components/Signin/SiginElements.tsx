@@ -1,3 +1,4 @@
+import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { primaryColor, primaryColorDark } from "../ButtonElement";
@@ -36,7 +37,7 @@ export const Icon = styled(Link)`
   color: #fff;
   font-weight: 700;
   font-size: 32px;
-
+  user-select: none;
   @media screen and (min-width: 480px) {
     margin-left: 16px;
     margin-top: 8px;
@@ -54,7 +55,7 @@ export const FormContent = styled.div`
   }
 `;
 
-export const Form = styled.form`
+export const Form = styled.div`
   background: #010101;
   max-width: 400px;
   height: auto;
@@ -64,6 +65,7 @@ export const Form = styled.form`
   margin: 0 auto;
   padding: 80px 32px;
   border-radius: 4px;
+  row-gap: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0, 9);
 
   @media screen and (min-width: 480px) {
@@ -72,7 +74,7 @@ export const Form = styled.form`
 `;
 
 export const FormH1 = styled.h1`
-  margin-bottom: 40px;
+  margin-bottom: 16px;
   color: #fff;
   font-size: 20px;
   font-weight: 400;
@@ -113,4 +115,37 @@ export const Text = styled.span`
   color: #fff;
   font-size: 14px;
   cursor: pointer;
+`;
+
+type SocialBuuttonProps = { bgcolor: string };
+export const SocialButton = styled.button<SocialBuuttonProps>`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background: ${({ bgcolor }) => bgcolor};
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+`;
+
+export const FacebookIcon = styled(FaFacebook)`
+  height: 64px;
+  color: #fff;
+`;
+
+export const GoogleIcon = styled(FaGoogle)`
+  height: 64px;
+  color: #fff;
+`;
+
+export const SocialText = styled.p`
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+  margin-left: 16px;
 `;

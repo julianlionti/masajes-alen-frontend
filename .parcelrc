@@ -7,5 +7,16 @@
     "*.{mp4,svg}": [
       "@parcel/transformer-raw"
     ]
+  },
+  "optimizers": {
+    "*.css": [
+      "@parcel/optimizer-cssnano"
+    ],
+    "*.html": [
+      "@parcel/optimizer-htmlnano"
+    ],
+    "*.{png,jpg,jpeg,svg,...}": [
+      "@parcel/optimizer-imagemin"
+    ]
   }
 }

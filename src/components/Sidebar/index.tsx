@@ -1,4 +1,4 @@
-import { useNavAndSide } from "../../utils/NavAndSideProvider";
+import { useNavAndSide } from "../../providers/NavAndSideProvider";
 import {
   CloseIcon,
   Icon,
@@ -10,7 +10,7 @@ import {
   SideBtnWrap,
 } from "./SideBarElements";
 
-export const Sidebar = () => {
+export const Sidebar = (): JSX.Element => {
   const { menus, toggleSidebar, sidebar } = useNavAndSide();
   return (
     <SidebarRoot isOpen={sidebar}>

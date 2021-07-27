@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { createContext } from "react";
-import { Dispatch, SetStateAction, useContext } from "react";
+import { useContext } from "react";
 
 type MenuProps = { route: string; title: string };
 interface NavAndSideCtx extends ProviderProps {
@@ -16,10 +16,12 @@ const initialState = {
 
 export type ProviderProps = { menus: MenuProps[]; sidebar?: boolean };
 const NavAndSideContext = createContext<NavAndSideCtx>(initialState);
-export const useNavAndSide = () => useContext(NavAndSideContext);
+export const useNavAndSide = (): NavAndSideCtx => useContext(NavAndSideContext);
 
 type NavAndSideProviderProps = React.PropsWithChildren<ProviderProps>;
-export const NavAndSideProvider = (props: NavAndSideProviderProps) => {
+export const NavAndSideProvider = (
+  props: NavAndSideProviderProps
+): JSX.Element => {
   const { menus, children } = props;
   const [sidebar, toggleSidebar] = useState(props.sidebar || false);
   return (

@@ -25,9 +25,10 @@ type InfoSectionProps = {
   dark?: boolean;
 };
 
-export const createSections = (props: InfoSectionProps[]) => props;
+export const createSections = (props: InfoSectionProps[]): InfoSectionProps[] =>
+  props;
 
-export const InfoSection = (props: InfoSectionProps) => {
+export const InfoSection = (props: InfoSectionProps): JSX.Element => {
   const { id, heading, subtitle, topline, btn, img, imgStart, dark } = props;
   return (
     <InfoContainer id={id} lightBg={!dark}>

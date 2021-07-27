@@ -1,16 +1,35 @@
-import { Navbar } from "./components/Navbar";
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Landing } from "./screens/Landing";
-import { SigninScreen } from "./screens/Signin";
-import { TurnsScreen } from "./screens/TurnsScreen";
+import { Loading } from "./components/Loading";
+import firebase from "firebase/app";
 
-export const App = () => {
+import "firebase/analytics";
+import "firebase/auth";
+
+const Landing = lazy(() => import("./screens/Landing"));
+const SigninScreen = lazy(() => import("./screens/Signin"));
+const TurnsScreen = lazy(() => import("./screens/TurnsScreen"));
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC8MhiMfB2C1p-vCwuftizqorbdRz33NtA",
+  authDomain: "masajes-c9db1.firebaseapp.com",
+  projectId: "masajes-c9db1",
+  storageBucket: "masajes-c9db1.appspot.com",
+  messagingSenderId: "213676711872",
+  appId: "1:213676711872:web:9ca6295402258a1ef63225",
+  measurementId: "G-99RX32RWJ9",
+};
+firebase.initializeApp(firebaseConfig);
+
+export const App = (): JSX.Element => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" component={Landing} exact />
-        <Route path="/signin" component={SigninScreen} exact />
-        <Route path="/turns" component={TurnsScreen} exact />
+        <Suspense fallback={<Loading />}>
+          <Route path="/" component={Landing} exact />
+          <Route path="/signin" component={SigninScreen} exact />
+          <Route path="/turns" component={TurnsScreen} exact />
+        </Suspense>
       </Switch>
     </BrowserRouter>
   );

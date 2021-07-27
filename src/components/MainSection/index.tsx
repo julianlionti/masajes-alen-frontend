@@ -13,7 +13,7 @@ import Video from "../../assets/videos/video2.mp4";
 import { useState } from "react";
 import { ButtonS } from "../ButtonElement";
 
-export const MainSection = () => {
+export const MainSection = (): JSX.Element => {
   const [hover, setHover] = useState(false);
 
   return (
