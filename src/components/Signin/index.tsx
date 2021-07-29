@@ -1,5 +1,6 @@
 import firebase from "firebase";
 import { useCallback } from "react";
+import { UserProps, useUserCtx } from "../../providers/UserProvider";
 import {
   Icon,
   Container,
@@ -14,11 +15,23 @@ import {
 } from "./SiginElements";
 
 export const Singin = (): JSX.Element => {
-  const callLogin = useCallback((provider: firebase.auth.AuthProvider) => {
-    const auth = firebase.auth();
-    auth.languageCode = "es";
-    auth.signInWithPopup(provider);
-  }, []);
+  const [, setUser] = useUserCtx();
+  const callLogin = useCallback(
+    (provider: firebase.auth.AuthProvider) => {
+      const auth = firebase.auth();
+      auth.languageCode = "es";
+      auth
+        .signInWithPopup(provider)
+        .then((user) => {
+          setUser(user.user as UserProps);
+          history.back();
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    },
+    [setUser]
+  );
 
   return (
     <Container>

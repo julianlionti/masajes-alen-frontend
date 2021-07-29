@@ -15,8 +15,10 @@ import { useNavAndSide } from "../../providers/NavAndSideProvider";
 import { animateScroll } from "react-scroll";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useUserCtx } from "../../providers/UserProvider";
 
 export const Navbar = (): JSX.Element => {
+  const [user] = useUserCtx();
   const { menus, toggleSidebar } = useNavAndSide();
   const [scrollNav, setScrollNav] = useState(false);
 
@@ -51,7 +53,9 @@ export const Navbar = (): JSX.Element => {
             ))}
           </NavMenu>
           <NavBtn>
-            <NavBtnLink to="signin">Iniciar Sesión</NavBtnLink>
+            <NavBtnLink to="signin">{`${
+              !user ? `Iniciar Sesión` : "Mi cuenta"
+            }`}</NavBtnLink>
           </NavBtn>
         </NavbarContainer>
       </Nav>

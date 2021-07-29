@@ -5,6 +5,7 @@ import firebase from "firebase/app";
 
 import "firebase/analytics";
 import "firebase/auth";
+import { UserProvider } from "./providers/UserProvider";
 
 const Landing = lazy(() => import("./screens/Landing"));
 const SigninScreen = lazy(() => import("./screens/Signin"));
@@ -23,14 +24,16 @@ firebase.initializeApp(firebaseConfig);
 
 export const App = (): JSX.Element => {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Suspense fallback={<Loading />}>
-          <Route path="/" component={Landing} exact />
-          <Route path="/signin" component={SigninScreen} exact />
-          <Route path="/turns" component={TurnsScreen} exact />
-        </Suspense>
-      </Switch>
-    </BrowserRouter>
+    <UserProvider>
+      <BrowserRouter>
+        <Switch>
+          <Suspense fallback={<Loading />}>
+            <Route path="/" component={Landing} exact />
+            <Route path="/signin" component={SigninScreen} exact />
+            <Route path="/turns" component={TurnsScreen} exact />
+          </Suspense>
+        </Switch>
+      </BrowserRouter>
+    </UserProvider>
   );
 };

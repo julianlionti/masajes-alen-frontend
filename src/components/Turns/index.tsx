@@ -1,11 +1,13 @@
-import firebase from "firebase";
 import moment, { Moment } from "moment";
 import "moment/locale/es";
 
 import { ReactNode, useCallback } from "react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useUserCtx } from "../../providers/UserProvider";
 import { Icon } from "../Signin/SiginElements";
+import CustomScroll from "react-scrollbars-custom";
+
 import {
   ArrowLeft,
   ArrowRight,
@@ -21,6 +23,7 @@ import {
   TurnsRoot,
   TurnWrap,
 } from "./TurnElements";
+import { useEffect } from "react";
 
 const sessionTime = 40;
 const hours = [
@@ -35,14 +38,12 @@ const hours = [
   { start: 18, disabled: false },
 ];
 
-const compareEqual = (date1: Moment, date2: Moment): boolean => {
-  console.log(date1, date2);
-  console.log(date2.startOf("day").diff(date1.startOf("day"), "day"));
-  return date2.startOf("day").diff(date1.startOf("day"), "day") === 0;
-};
+const compareEqual = (date1: Moment, date2: Moment): boolean =>
+  date2.startOf("day").diff(date1.startOf("day"), "day") === 0;
 
 const tomorrow = moment().add(1, "d").startOf("day").clone();
 export const Turns = (): JSX.Element => {
+  const [user] = useUserCtx();
   const [date, setDate] = useState(tomorrow);
   const history = useHistory();
 
@@ -60,23 +61,23 @@ export const Turns = (): JSX.Element => {
             day.format("MMMM")
           )}`}</DateText>
         </DayHeader>
-        {hours
-          .map((e) => ({ ...e, disabled: day.day() === 0 }))
-          .map(({ start, disabled }) => (
-            <TurnItem
-              onClick={() => {
-                if (!firebase.auth().currentUser) history.push("/signin");
-                else {
-                  alert("Confirmar Turno");
-                }
-              }}
-              disabled={disabled}
-              key={start}
-            >{`${start}:00 - ${start}.${sessionTime}`}</TurnItem>
-          ))}
+        <CustomScroll style={{ height: 350 }}>
+          {hours
+            .map((e) => ({ ...e, disabled: day.day() === 0 }))
+            .map(({ start, disabled }) => (
+              <TurnItem
+                onClick={() => {
+                  if (!user) history.push("/signin");
+                  else alert("Confirmar Turno");
+                }}
+                disabled={disabled}
+                key={start}
+              >{`${start}:00 - ${start}.${sessionTime}`}</TurnItem>
+            ))}
+        </CustomScroll>
       </DayCard>
     ));
-  }, [date, history]);
+  }, [date, history, user]);
 
   return (
     <TurnsRoot>

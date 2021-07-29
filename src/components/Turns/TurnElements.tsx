@@ -4,6 +4,7 @@ import { primaryColor, primaryColorDark } from "../ButtonElement";
 
 export const TurnsRoot = styled.div`
   min-height: 692px;
+  max-height: 692px;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -19,18 +20,19 @@ export const TurnsRoot = styled.div`
 `;
 
 export const TurnWrap = styled.div`
-  height: 100%;
+  /* height: 100%; */
+
   display: flex;
   flex-direction: column;
   justify-content: center;
 
   @media screen and (min-width: 480px) {
-    height: 80%;
+    /* height: 80%; */
   }
 `;
 
 export const TurnContent = styled.div`
-  height: 100%;
+  height: 90%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -44,11 +46,10 @@ export const TurnCard = styled.div`
   background: #fff;
   max-width: 1100px;
   min-width: 300px;
-  height: auto;
   width: 90%;
   z-index: 1;
   margin: 0 auto;
-  padding: 80px 32px;
+  padding: 32px 32px;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0, 9);
 
@@ -103,20 +104,49 @@ export const DateText = styled.p`
 `;
 
 export const DaysContent = styled.div`
-  display: grid;
+  /* height: 380px; */
   margin-top: 16px;
-  grid-template-columns: repeat(6, 1fr);
+
+  display: grid;
   grid-gap: 10px;
-  grid-template-areas: "day1 day2 day3 day4 day5 day6";
+
+  grid-template-columns: repeat(6, 1fr);
+
+  @media screen and (max-width: 840px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
 
   @media screen and (max-width: 760px) {
-    grid-template-areas: "day1 day2 day3 day4 day5";
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media screen and (max-width: 480px) {
+    grid-template-columns: repeat(1, 1fr);
   }
 `;
 
 export const DayCard = styled.div`
   width: 100%;
-  margin: 8px;
+  /* margin: 8px; */
+  /* height: 460px; */
+
+  @media screen and (max-width: 480px) {
+    &:nth-child(n + 2) {
+      visibility: hidden;
+    }
+  }
+
+  @media screen and (max-width: 760px) {
+    &:nth-child(n + 4) {
+      visibility: hidden;
+    }
+  }
+
+  @media screen and (max-width: 840px) {
+    &:nth-child(n + 6) {
+      visibility: hidden;
+    }
+  }
 `;
 
 export const DayHeader = styled.div`
@@ -132,7 +162,7 @@ export const DayH2 = styled.h2`
 
 type TurnItemProps = { disabled?: boolean };
 export const TurnItem = styled.button<TurnItemProps>`
-  width: 100%;
+  width: 98%;
   border: none;
   background: ${({ disabled }) =>
     disabled ? "rgba(0,0,0,0.3)" : primaryColor};
