@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Loading } from "./components/Loading";
 import firebase from "firebase/app";
@@ -6,6 +6,7 @@ import firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
 import { UserProvider } from "./providers/UserProvider";
+import { useEffect } from "react";
 
 const Landing = lazy(() => import("./screens/Landing"));
 const SigninScreen = lazy(() => import("./screens/Signin"));
@@ -20,9 +21,12 @@ const firebaseConfig = {
   appId: "1:213676711872:web:9ca6295402258a1ef63225",
   measurementId: "G-99RX32RWJ9",
 };
-firebase.initializeApp(firebaseConfig);
 
 export const App = (): JSX.Element => {
+  useEffect(() => {
+    firebase.initializeApp(firebaseConfig);
+  }, []);
+
   return (
     <UserProvider>
       <BrowserRouter>

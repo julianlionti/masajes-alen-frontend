@@ -1,7 +1,4 @@
-import { useContext } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
-import { createContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 export type UserProps = { displayName: string; email: string } | null;
 type UserCtx = [UserProps, React.Dispatch<React.SetStateAction<UserProps>>];

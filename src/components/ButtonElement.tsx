@@ -26,12 +26,18 @@ const StyledBtn = styled.div<ButtonProps>`
   align-items: center;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
+  user-select: none;
 
   &:hover {
-    transition: all 0.2s ease-in-out;
-    background: ${({ primary }) => (primary ? "#FFF" : primaryColor)};
+    @media screen and (min-width: 480px) {
+      transition: all 0.2s ease-in-out;
+      background: ${({ primary }) => (primary ? "#FFF" : primaryColor)};
+      color: ${({ primary }) => (primary ? "#010606" : "#fff")};
+    }
   }
 `;
+
+export const Button = StyledBtn;
 
 export const ButtonR = (
   props: React.PropsWithChildren<ButtonProps & { btnProps: LinkPropsR }>

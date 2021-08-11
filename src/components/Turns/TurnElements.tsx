@@ -1,17 +1,16 @@
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import styled from "styled-components";
 import { primaryColor, primaryColorDark } from "../ButtonElement";
+import CustomScroll from "react-scrollbars-custom";
 
 export const TurnsRoot = styled.div`
   min-height: 692px;
-  max-height: 692px;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   top: 0;
   z-index: 0;
-  overflow: hidden;
   background: linear-gradient(
     108deg,
     ${primaryColor} 0%,
@@ -20,38 +19,25 @@ export const TurnsRoot = styled.div`
 `;
 
 export const TurnWrap = styled.div`
-  /* height: 100%; */
-
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  @media screen and (min-width: 480px) {
-    /* height: 80%; */
-  }
 `;
 
 export const TurnContent = styled.div`
-  height: 90%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  @media screen and (min-width: 480px) {
-    padding: 10px;
-  }
-`;
-
-export const TurnCard = styled.div`
   background: #fff;
-  max-width: 1100px;
   min-width: 300px;
+  max-width: 1100px;
   width: 90%;
   z-index: 1;
   margin: 0 auto;
   padding: 32px 32px;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0, 9);
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   @media screen and (min-width: 480px) {
     padding: 32px 32px;
@@ -106,23 +92,9 @@ export const DateText = styled.p`
 export const DaysContent = styled.div`
   /* height: 380px; */
   margin-top: 16px;
-
-  display: grid;
-  grid-gap: 10px;
-
-  grid-template-columns: repeat(6, 1fr);
-
-  @media screen and (max-width: 840px) {
-    grid-template-columns: repeat(5, 1fr);
-  }
-
-  @media screen and (max-width: 760px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media screen and (max-width: 480px) {
-    grid-template-columns: repeat(1, 1fr);
-  }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 `;
 
 export const DayCard = styled.div`
@@ -132,19 +104,19 @@ export const DayCard = styled.div`
 
   @media screen and (max-width: 480px) {
     &:nth-child(n + 2) {
-      visibility: hidden;
+      display: none;
     }
   }
 
   @media screen and (max-width: 760px) {
     &:nth-child(n + 4) {
-      visibility: hidden;
+      display: none;
     }
   }
 
   @media screen and (max-width: 840px) {
     &:nth-child(n + 6) {
-      visibility: hidden;
+      display: none;
     }
   }
 `;
@@ -181,5 +153,13 @@ export const TurnItem = styled.button<TurnItemProps>`
   &:hover {
     background: ${({ disabled }) =>
       disabled ? "rgba(0,0,0,0.3)" : primaryColorDark};
+  }
+`;
+
+export const DayScroll = styled(CustomScroll)`
+  height: 375px !important;
+
+  @media screen and (max-width: 480px) {
+    height: 400px !important;
   }
 `;

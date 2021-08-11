@@ -1,3 +1,4 @@
+import React from "react";
 import { LoadingBar, LoadingRoot } from "./LoadingElements";
 
 export const Loading = (): JSX.Element => {
