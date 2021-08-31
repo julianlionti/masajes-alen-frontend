@@ -1,10 +1,16 @@
-import React from "react";
-import { LoadingBar, LoadingRoot } from "./LoadingElements";
+import { Background, Centered, Root } from "./LoadingElements";
+import { ClockLoader } from "react-spinners";
 
-export const Loading = (): JSX.Element => {
+type Props = { show: boolean };
+export const Loading = ({ show }: Props): JSX.Element => {
   return (
-    <LoadingRoot>
-      <LoadingBar />
-    </LoadingRoot>
+    <>
+      <Background open={show} />
+      <Root open={show}>
+        <Centered open={show}>
+          <ClockLoader />
+        </Centered>
+      </Root>
+    </>
   );
 };

@@ -26,6 +26,8 @@ import {
 import { primaryColor, primaryColorDark } from "../ButtonElement";
 import axios from "axios";
 import Urls from "../../utils/Urls";
+import { TurnState } from "../../screens/TurnsScreen";
+import { LoadingBar, LoadingRoot } from "../Loading/LoadingElements";
 
 const sessionTime = 40;
 const hours = [
@@ -53,9 +55,8 @@ const compareEqual = (date1: Moment, date2: Moment): boolean =>
   date2.startOf("day").diff(date1.startOf("day"), "day") === 0;
 
 const tomorrow = moment().add(1, "d").startOf("day").clone();
-export const Turns = (): JSX.Element => {
+export const Turns = ({ data, loading, error }: TurnState): JSX.Element => {
   const [user] = useUserCtx();
-  // const [showConfirmation, setShowConfirmation] = useState(false);
   const [date, setDate] = useState(tomorrow);
   const history = useHistory();
 

@@ -1,6 +1,9 @@
-import firebase from "firebase";
-import { useCallback } from "react";
-import { UserProps, useUserCtx } from "../../providers/UserProvider";
+import { useDispatch } from "react-redux";
+import { login } from "../../reducers/user";
+import { fbAuthProvider, googleAuthProvider } from "../../utils/firebaseConfig";
+import { useSelector } from "../../utils/Store";
+import { Loading } from "../Loading";
+
 import {
   Icon,
   Container,
@@ -15,24 +18,8 @@ import {
 } from "./SiginElements";
 
 export const Singin = (): JSX.Element => {
-  const [, setUser] = useUserCtx();
-  const callLogin = useCallback(
-    (provider: firebase.auth.AuthProvider) => {
-      const auth = firebase.auth();
-      auth.languageCode = "es";
-      auth
-        .signInWithPopup(provider)
-        .then((user) => {
-          setUser(user.user as UserProps);
-          history.back();
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-    },
-    [setUser]
-  );
-
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.user);
   return (
     <Container>
       <FormWrap>
@@ -42,16 +29,14 @@ export const Singin = (): JSX.Element => {
             <FormH1>Iniciar sesión con las redes</FormH1>
             <SocialButton
               bgcolor="#3b5998"
-              onClick={() =>
-                callLogin(new firebase.auth.FacebookAuthProvider())
-              }
+              onClick={() => dispatch(login(fbAuthProvider))}
             >
               <FacebookIcon />
               <SocialText>Iniciar sesion con Facebook</SocialText>
             </SocialButton>
             <SocialButton
               bgcolor="#DB4437"
-              onClick={() => callLogin(new firebase.auth.GoogleAuthProvider())}
+              onClick={() => dispatch(login(googleAuthProvider))}
             >
               <GoogleIcon />
               <SocialText>Iniciar sesion con Google</SocialText>
@@ -59,6 +44,7 @@ export const Singin = (): JSX.Element => {
           </Form>
         </FormContent>
       </FormWrap>
+      <Loading show={loading} />
     </Container>
   );
 };

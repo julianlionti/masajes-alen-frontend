@@ -1,10 +1,11 @@
 // import dotenv from "dotenv";
 // dotenv.config();
 
-console.log("env", process.env);
+const baseURL = process.env.BASE_URL;
+const apiUrl = `${baseURL}api/`;
 
 const Urls = {
-  turn: `${"asd"}`,
+  turn: `${apiUrl}turn`,
 };
 
 export default Urls;

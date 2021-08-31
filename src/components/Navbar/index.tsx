@@ -15,10 +15,11 @@ import { useNavAndSide } from "../../providers/NavAndSideProvider";
 import { animateScroll } from "react-scroll";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useUserCtx } from "../../providers/UserProvider";
+import { useSelector } from "../../utils/Store";
 
 export const Navbar = (): JSX.Element => {
-  const [user] = useUserCtx();
+  // const [user] = useUserCtx();
+  const { user } = useSelector((state) => state.user);
   const { menus, toggleSidebar } = useNavAndSide();
   const [scrollNav, setScrollNav] = useState(false);
 
