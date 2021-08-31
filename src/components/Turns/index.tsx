@@ -2,10 +2,8 @@ import moment, { Moment } from "moment";
 import "moment/locale/es";
 
 import React, { ReactNode, useCallback } from "react";
-import Swal from "sweetalert2";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useUserCtx } from "../../providers/UserProvider";
 import { Icon } from "../Signin/SiginElements";
 
 import {
@@ -24,10 +22,8 @@ import {
   TurnWrap,
 } from "./TurnElements";
 import { primaryColor, primaryColorDark } from "../ButtonElement";
-import axios from "axios";
 import Urls from "../../utils/Urls";
 import { TurnState } from "../../screens/TurnsScreen";
-import { LoadingBar, LoadingRoot } from "../Loading/LoadingElements";
 
 const sessionTime = 40;
 const hours = [
@@ -56,7 +52,7 @@ const compareEqual = (date1: Moment, date2: Moment): boolean =>
 
 const tomorrow = moment().add(1, "d").startOf("day").clone();
 export const Turns = ({ data, loading, error }: TurnState): JSX.Element => {
-  const [user] = useUserCtx();
+  // const [user] = useUserCtx();
   const [date, setDate] = useState(tomorrow);
   const history = useHistory();
 
@@ -70,33 +66,33 @@ export const Turns = ({ data, loading, error }: TurnState): JSX.Element => {
       const dayinMonth = day.date();
       const fullMonthName = `${formatStr(day.locale("es").format("MMM"))}`;
 
-      if (!user) history.push("/signin");
-      else {
-        await Swal.fire({
-          title: "Confirmación",
-          icon: "info",
-          html: `Estas por reservar el turno <b>${duration}</b> del día <b>${dayinMonth} ${fullMonthName}</b>`,
-          iconColor: primaryColor,
-          confirmButtonText: "Confirmar",
-          confirmButtonColor: primaryColorDark,
-          backdrop: true,
-          showCloseButton: true,
-          allowEscapeKey: false,
-          allowOutsideClick: false,
-          showLoaderOnConfirm: true,
-          preConfirm: async () => {
-            try {
-              await axios.post(Urls.turn);
-              return true;
-            } catch (ex) {
-              Swal.showValidationMessage(
-                `No se pudo completar el pedido: ${ex.message}`
-              );
-              return false;
-            }
-          },
-        });
-      }
+      // if (!user) history.push("/signin");
+      // else {
+      //   await Swal.fire({
+      //     title: "Confirmación",
+      //     icon: "info",
+      //     html: `Estas por reservar el turno <b>${duration}</b> del día <b>${dayinMonth} ${fullMonthName}</b>`,
+      //     iconColor: primaryColor,
+      //     confirmButtonText: "Confirmar",
+      //     confirmButtonColor: primaryColorDark,
+      //     backdrop: true,
+      //     showCloseButton: true,
+      //     allowEscapeKey: false,
+      //     allowOutsideClick: false,
+      //     showLoaderOnConfirm: true,
+      //     preConfirm: async () => {
+      //       try {
+      //         await axios.post(Urls.turn);
+      //         return true;
+      //       } catch (ex) {
+      //         Swal.showValidationMessage(
+      //           `No se pudo completar el pedido: ${ex.message}`
+      //         );
+      //         return false;
+      //       }
+      //     },
+      //   });
+      // }
     };
 
     return nextDays.map((day) => {
@@ -129,7 +125,7 @@ export const Turns = ({ data, loading, error }: TurnState): JSX.Element => {
         </DayCard>
       );
     });
-  }, [date, history, user]);
+  }, [date, history]);
 
   return (
     <TurnsRoot>
