@@ -31,8 +31,8 @@ const StyledBtn = styled.div<ButtonProps>`
   &:hover {
     @media screen and (min-width: 480px) {
       transition: all 0.2s ease-in-out;
-      background: ${({ primary }) => (primary ? "#FFF" : primaryColor)};
-      color: ${({ primary }) => (primary ? "#010606" : "#fff")};
+      background: ${({ primary }) => (primary ? primaryColor : "#eeeeee")};
+      color: #010606;
     }
   }
 `;

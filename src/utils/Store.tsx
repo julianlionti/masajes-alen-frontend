@@ -13,14 +13,17 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
+import turnReducer, { TurnState } from "../reducers/turn";
 
 interface State {
   user: UserState;
+  turn: TurnState;
 }
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    turn: turnReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

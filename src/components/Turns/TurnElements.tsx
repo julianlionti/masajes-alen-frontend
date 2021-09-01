@@ -3,48 +3,6 @@ import styled from "styled-components";
 import { primaryColor, primaryColorDark } from "../ButtonElement";
 import CustomScroll from "react-scrollbars-custom";
 
-export const TurnsRoot = styled.div`
-  min-height: 692px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 0;
-  background: linear-gradient(
-    108deg,
-    ${primaryColor} 0%,
-    ${primaryColorDark} 100%
-  );
-`;
-
-export const TurnWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-export const TurnContent = styled.div`
-  background: #fff;
-  min-width: 300px;
-  max-width: 1100px;
-  width: 90%;
-  z-index: 1;
-  margin: 0 auto;
-  padding: 32px 32px;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0, 9);
-  margin-top: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  @media screen and (min-width: 480px) {
-    padding: 32px 32px;
-    width: 100%;
-  }
-`;
-
 export const TurnHeader = styled.div`
   display: flex;
   align-items: center;
@@ -147,9 +105,8 @@ export const TurnItem = styled.button<TurnItemProps>`
   transition: all 0.2s ease-in-out;
   border-radius: 4px;
   font-size: 16px;
-  filter: ${({ disabled }) => (disabled ? "blur(2px)" : "blur(0px)")};
-  -ms-filter: ${({ disabled }) => (disabled ? "blur(2px)" : "blur(0px)")};
-  -webkit-filter: ${({ disabled }) => (disabled ? "blur(2px)" : "blur(0px)")};
+  filter: ${({ disabled }) => (disabled ? "blur(0.5px)" : "blur(0px)")};
+
   &:hover {
     background: ${({ disabled }) =>
       disabled ? "rgba(0,0,0,0.3)" : primaryColorDark};

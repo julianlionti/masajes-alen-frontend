@@ -1,6 +1,14 @@
+import Cookies from "js-cookie";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { login } from "../../reducers/user";
-import { fbAuthProvider, googleAuthProvider } from "../../utils/firebaseConfig";
+import Config from "../../utils/Config";
+import {
+  auth,
+  fbAuthProvider,
+  googleAuthProvider,
+} from "../../utils/firebaseConfig";
 import { useSelector } from "../../utils/Store";
 import { Loading } from "../Loading";
 
@@ -15,11 +23,23 @@ import {
   FacebookIcon,
   SocialText,
   GoogleIcon,
+  ErrorRoot,
+  ErrorP,
 } from "./SiginElements";
 
 export const Singin = (): JSX.Element => {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.user);
+  const history = useHistory();
+  const { loading, user, error } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (user && Cookies.get(Config.USER_KEY)) {
+      history.replace("/");
+    }
+    if (user && !Cookies.get(Config.USER_KEY)) {
+      auth.signOut();
+    }
+  }, [user, history]);
 
   return (
     <Container>
@@ -42,6 +62,11 @@ export const Singin = (): JSX.Element => {
               <GoogleIcon />
               <SocialText>Iniciar sesion con Google</SocialText>
             </SocialButton>
+            {error && (
+              <ErrorRoot>
+                <ErrorP>{error}</ErrorP>
+              </ErrorRoot>
+            )}
           </Form>
         </FormContent>
       </FormWrap>

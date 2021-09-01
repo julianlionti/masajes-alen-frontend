@@ -54,7 +54,7 @@ export const Navbar = (): JSX.Element => {
             ))}
           </NavMenu>
           <NavBtn>
-            <NavBtnLink to="signin">{`${
+            <NavBtnLink to={user ? "myprofile" : "signin"}>{`${
               !user ? `Iniciar Sesión` : "Mi cuenta"
             }`}</NavBtnLink>
           </NavBtn>

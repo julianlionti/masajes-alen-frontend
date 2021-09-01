@@ -1,10 +1,8 @@
 import moment, { Moment } from "moment";
 import "moment/locale/es";
 
-import React, { ReactNode, useCallback } from "react";
+import { ReactNode, useCallback } from "react";
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { Icon } from "../Signin/SiginElements";
 
 import {
   ArrowLeft,
@@ -15,30 +13,27 @@ import {
   DayHeader,
   DaysContent,
   DayScroll,
-  TurnContent,
   TurnHeader,
   TurnItem,
-  TurnsRoot,
-  TurnWrap,
 } from "./TurnElements";
-import { primaryColor, primaryColorDark } from "../ButtonElement";
-import Urls from "../../utils/Urls";
-import { TurnState } from "../../screens/TurnsScreen";
+import { ScreenContainer } from "../ScreenContainer/ScreenContainer";
+import { useSelector } from "../../utils/Store";
+import { useRef } from "react";
+import { AlertDialog } from "../AlertDialog/AlertDialog";
+import { useDispatch } from "react-redux";
+import { cleanPostedTurn, postTurn } from "../../reducers/turn";
 
 const sessionTime = 40;
 const hours = [
-  { start: 9, disabled: false },
-  { start: 10, disabled: false },
-  { start: 11, disabled: false },
-  { start: 12, disabled: false },
-  { start: 14, disabled: false },
-  { start: 15, disabled: false },
-  { start: 16, disabled: false },
-  { start: 17, disabled: false },
-  { start: 18, disabled: false },
-  { start: 19, disabled: false },
-  { start: 20, disabled: false },
-  { start: 21, disabled: false },
+  { start: 9 },
+  { start: 10 },
+  { start: 11 },
+  { start: 12 },
+  { start: 14 },
+  { start: 15 },
+  { start: 16 },
+  { start: 17 },
+  { start: 18 },
 ];
 
 const formatStr = (str: string): ReactNode => {
@@ -51,10 +46,32 @@ const compareEqual = (date1: Moment, date2: Moment): boolean =>
   date2.startOf("day").diff(date1.startOf("day"), "day") === 0;
 
 const tomorrow = moment().add(1, "d").startOf("day").clone();
-export const Turns = ({ data, loading, error }: TurnState): JSX.Element => {
+
+type TurnConfirmation = {
+  dayInMonth: number;
+  fullMonthName: string;
+  day: Moment;
+  duration: string;
+};
+
+export const Turns = (): JSX.Element => {
   // const [user] = useUserCtx();
+  const dispatch = useDispatch();
+  const turnRef = useRef<TurnConfirmation | null>(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const { loading, turns, error, success } = useSelector(({ turn }) => turn);
+
   const [date, setDate] = useState(tomorrow);
-  const history = useHistory();
+
+  const onConfirmated = useCallback(
+    (wasAccepted) => {
+      setShowConfirmation(false);
+      if (wasAccepted && turnRef.current) {
+        dispatch(postTurn({ day: turnRef.current.day.toDate().toString() }));
+      }
+    },
+    [dispatch]
+  );
 
   const renderDays = useCallback(() => {
     const firstDay = date;
@@ -62,37 +79,13 @@ export const Turns = ({ data, loading, error }: TurnState): JSX.Element => {
       .fill(null)
       .map((_, i) => firstDay.clone().add(i, "d"));
 
-    const onConfirmation = async (day: Moment, duration: string) => {
-      const dayinMonth = day.date();
+    const onTurn = async (day: Moment, start: number) => {
+      const duration = `${start}:00 - ${start}.${sessionTime}`;
+      day.set("h", start);
+      const dayInMonth = day.date();
       const fullMonthName = `${formatStr(day.locale("es").format("MMM"))}`;
-
-      // if (!user) history.push("/signin");
-      // else {
-      //   await Swal.fire({
-      //     title: "Confirmación",
-      //     icon: "info",
-      //     html: `Estas por reservar el turno <b>${duration}</b> del día <b>${dayinMonth} ${fullMonthName}</b>`,
-      //     iconColor: primaryColor,
-      //     confirmButtonText: "Confirmar",
-      //     confirmButtonColor: primaryColorDark,
-      //     backdrop: true,
-      //     showCloseButton: true,
-      //     allowEscapeKey: false,
-      //     allowOutsideClick: false,
-      //     showLoaderOnConfirm: true,
-      //     preConfirm: async () => {
-      //       try {
-      //         await axios.post(Urls.turn);
-      //         return true;
-      //       } catch (ex) {
-      //         Swal.showValidationMessage(
-      //           `No se pudo completar el pedido: ${ex.message}`
-      //         );
-      //         return false;
-      //       }
-      //     },
-      //   });
-      // }
+      turnRef.current = { day, fullMonthName, dayInMonth, duration };
+      setShowConfirmation(true);
     };
 
     return nextDays.map((day) => {
@@ -109,11 +102,17 @@ export const Turns = ({ data, loading, error }: TurnState): JSX.Element => {
           <DayScroll>
             {hours
               .map((e) => ({ ...e, disabled: day.day() === 0 }))
-              .map(({ start, disabled }) => {
+              .map(({ start }) => {
                 const duration = `${start}:00 - ${start}.${sessionTime}`;
+                const turnTime = day.clone().set("h", start).toISOString();
+
+                const disabled =
+                  turns.map((e) => e.day).includes(turnTime) ||
+                  day.isoWeekday() === 7;
+
                 return (
                   <TurnItem
-                    onClick={() => onConfirmation(day, duration)}
+                    onClick={() => onTurn(day, start)}
                     disabled={disabled}
                     key={start}
                   >
@@ -125,31 +124,58 @@ export const Turns = ({ data, loading, error }: TurnState): JSX.Element => {
         </DayCard>
       );
     });
-  }, [date, history]);
+  }, [date, turns]);
 
   return (
-    <TurnsRoot>
-      <TurnWrap>
-        <Icon to="/">Pedí tu turno</Icon>
-        <TurnContent>
-          <TurnHeader>
-            <ArrowLeft
-              onClick={() => setDate((e) => e.clone().subtract(1, "d"))}
-              disabled={compareEqual(date, tomorrow)}
-            />
-            <ArrowRight
-              onClick={() => setDate((e) => e.clone().add(1, "d"))}
-              disabled={compareEqual(date, moment().add(15, "d"))}
-            />
-            <DateText>Julio 2021</DateText>
-          </TurnHeader>
-          <DaysContent>{renderDays()}</DaysContent>
-        </TurnContent>
-      </TurnWrap>
-      {/* <ConfirmationDlg
+    <ScreenContainer title="Pedi tu turno" loading={loading}>
+      <TurnHeader>
+        <ArrowLeft
+          onClick={() => setDate((e) => e.clone().subtract(1, "d"))}
+          disabled={compareEqual(date, tomorrow)}
+        />
+        <ArrowRight
+          onClick={() => setDate((e) => e.clone().add(1, "d"))}
+          disabled={compareEqual(date, moment().add(15, "d"))}
+        />
+        <DateText>Julio 2021</DateText>
+      </TurnHeader>
+      <DaysContent>{turns && renderDays()}</DaysContent>
+      <AlertDialog
+        icon="question"
+        onClose={onConfirmated}
         show={showConfirmation}
-        onClose={() => setShowConfirmation(false)}
-      /> */}
-    </TurnsRoot>
+        title={"Confirmación"}
+        subtitle={
+          turnRef.current ? (
+            <span>
+              Estás por reservar el turno{" "}
+              <b>{` ${turnRef.current.duration} `}</b>del día
+              <b>
+                {` ${turnRef.current.dayInMonth} ${turnRef.current.fullMonthName} `}
+              </b>
+            </span>
+          ) : (
+            ""
+          )
+        }
+      />
+
+      <AlertDialog
+        btns={["close"]}
+        onClose={() => dispatch(cleanPostedTurn())}
+        show={!!success || !!error}
+        icon={success ? "success" : error ? "error" : undefined}
+        title={success ? "Confirmado!" : "Ocurrió un error"}
+        subtitle={
+          success ? (
+            <span>
+              El turno fue <b>reservado</b> satisfactoriamente. Gracias!
+            </span>
+          ) : (
+            error
+          )
+        }
+      />
+    </ScreenContainer>
   );
 };

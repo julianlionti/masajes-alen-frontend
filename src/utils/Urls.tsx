@@ -6,6 +6,7 @@ const apiUrl = `${baseURL}api/`;
 
 const Urls = {
   turn: `${apiUrl}turn`,
+  user: `${apiUrl}user`,
 };
 
 export default Urls;
