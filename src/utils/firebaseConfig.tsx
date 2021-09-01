@@ -1,6 +1,10 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { FacebookAuthProvider, GoogleAuthProvider } from "firebase/auth";
+import {
+  FacebookAuthProvider,
+  getAuth,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
 // Initialize Firebase
 const app = initializeApp({
@@ -13,8 +17,10 @@ const app = initializeApp({
   measurementId: "G-6W0SSCHM54",
 });
 const analytics = getAnalytics(app);
+const auth = getAuth(app);
+auth.languageCode = "es";
 
 const googleAuthProvider = new GoogleAuthProvider();
 const fbAuthProvider = new FacebookAuthProvider();
 
-export { app, analytics, googleAuthProvider, fbAuthProvider };
+export { auth, analytics, googleAuthProvider, fbAuthProvider };
