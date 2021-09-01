@@ -3,6 +3,7 @@ import { persistReducer } from "redux-persist";
 import { PersistConfig } from "redux-persist/es/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { AuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { app } from "../utils/firebaseConfig";
 
 export type UserProps = { displayName: string; email: string };
 export type UserState = {
@@ -19,12 +20,13 @@ const initialState: UserState = {
 export const login = createAsyncThunk<UserProps, AuthProvider>(
   "user/login",
   async (provider) => {
-    const auth = getAuth();
-    await auth.signOut();
+    const auth = getAuth(app);
     auth.languageCode = "es";
+
     const user = await signInWithPopup(auth, provider);
 
     console.log(user);
+    console.log("Pasaje");
 
     return { displayName: "asda", email: "sada", meta: "asd", payload: "asd" };
   }
