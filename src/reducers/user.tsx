@@ -23,12 +23,8 @@ export const login = createAsyncThunk<UserProps, AuthProvider>(
     const auth = getAuth(app);
     auth.languageCode = "es";
 
-    const user = await signInWithPopup(auth, provider);
-
-    console.log(user);
-    console.log("Pasaje");
-
-    return { displayName: "asda", email: "sada", meta: "asd", payload: "asd" };
+    const { user } = await signInWithPopup(auth, provider);
+    return user;
   }
 );
 
@@ -51,6 +47,7 @@ const userSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.user = action.payload;
+      state.loading = false;
     });
   },
 });
