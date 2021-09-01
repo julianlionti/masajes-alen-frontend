@@ -2,18 +2,23 @@ import storage from "redux-persist/es/storage";
 import { persistReducer } from "redux-persist";
 import { PersistConfig } from "redux-persist/es/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  AuthProvider,
+  FacebookAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { auth } from "../utils/firebaseConfig";
 import axios, { AxiosError } from "axios";
 import Urls from "../utils/Urls";
 import Config from "../utils/Config";
-import Cookies from "js-cookie";
+import Cookies from "../utils/Cookies";
 
 export type UserProps = {
   displayName: string;
   email: string;
   uid: string;
   token: string;
+  admin: boolean;
 };
 
 export type UserState = {
@@ -30,24 +35,36 @@ const initialState: UserState = {
 export const login = createAsyncThunk<UserProps, AuthProvider>(
   "user/login",
   async (provider) => {
+    await auth.signOut();
+
     let user: UserProps | null = null;
     if (Config.NODE_ENV !== "development") {
       const { user: fbUser } = await signInWithPopup(auth, provider);
       const token = await fbUser.getIdToken();
       const { displayName, email, uid } = fbUser;
-      user = { displayName, email, uid, token };
+      user = { displayName, email, uid, token, admin: false };
     } else {
+      const isFb = provider instanceof FacebookAuthProvider;
       user = {
-        displayName: "Prueba",
-        email: "prueba@prueba.com",
-        uid: "zktlgAweWxgHZuFG9P7uF1iYllf1",
-        token: "ey273128937218907219837219hjkashdaksjdh192037120389yh0",
+        admin: true,
+        displayName: "Prueba2",
+        email: `prueba@${isFb ? "fb" : "google"}.com`,
+        uid: isFb
+          ? "zktlgAweWxgHZuFG9P7uF1iYllf1"
+          : "zktlgAweWxgHZh3s1P7uF1iYllf1",
+        token: isFb
+          ? "eysadmansdjklashodjkahsdjlka"
+          : "eyaskdplp2k3lñ2wkñl2k32ñl3k2ñl3k",
       };
     }
 
     try {
-      await axios.post(Urls.user, user);
-      return user;
+      Cookies.set(Config.USER_KEY, user.token, {
+        path: "/",
+        maxAge: 60 * 60 * 24,
+      });
+      const { data } = await axios.post(Urls.user, user);
+      return { ...user, admin: data.admin };
     } catch (ex) {
       const error = ex as AxiosError;
       const { response } = error.request || {};
@@ -69,6 +86,7 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state) => {
       state.loading = true;
+      state.user = null;
     });
     builder.addCase(login.rejected, (state, action) => {
       const error = JSON.parse(action.error.message || "{}");

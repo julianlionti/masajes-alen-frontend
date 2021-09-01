@@ -1,9 +1,9 @@
-import Cookies from "js-cookie";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { login } from "../../reducers/user";
 import Config from "../../utils/Config";
+import Cookies from "../../utils/Cookies";
 import {
   auth,
   fbAuthProvider,
@@ -33,10 +33,11 @@ export const Singin = (): JSX.Element => {
   const { loading, user, error } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (user && Cookies.get(Config.USER_KEY)) {
+    const userInfo = Cookies.get(Config.USER_KEY);
+    if (user && userInfo) {
       history.replace("/");
     }
-    if (user && !Cookies.get(Config.USER_KEY)) {
+    if (user && !userInfo) {
       auth.signOut();
     }
   }, [user, history]);

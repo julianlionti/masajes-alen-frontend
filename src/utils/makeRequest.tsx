@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosPromise, AxiosRequestConfig } from "axios";
-import Cookies from "js-cookie";
 import Config from "./Config";
+import Cookies from "./Cookies";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const makeRequest = async <T extends any = any>(
@@ -14,7 +14,6 @@ export const makeRequest = async <T extends any = any>(
     };
     const finalConfig = { ...config, headers: finalHeaders };
     const data = await axios(finalConfig);
-    console.log(data);
     return data;
   } catch (ex) {
     const error = ex as AxiosError;

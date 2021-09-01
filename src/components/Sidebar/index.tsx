@@ -1,4 +1,5 @@
 import { useNavAndSide } from "../../providers/NavAndSideProvider";
+import { useSelector } from "../../utils/Store";
 import {
   CloseIcon,
   Icon,
@@ -11,6 +12,7 @@ import {
 } from "./SideBarElements";
 
 export const Sidebar = (): JSX.Element => {
+  const { user } = useSelector(({ user }) => user);
   const { menus, toggleSidebar, sidebar } = useNavAndSide();
   return (
     <SidebarRoot isOpen={sidebar}>
@@ -33,8 +35,11 @@ export const Sidebar = (): JSX.Element => {
           ))}
         </SidebarMenu>
         <SideBtnWrap>
-          <SidebarRoute onClick={toggleSidebar} to="signin">
-            Iniciar Sesión
+          <SidebarRoute
+            onClick={toggleSidebar}
+            to={!user ? "signin" : "myprofile"}
+          >
+            {!user ? "Iniciar Sesión" : "Mi cuenta"}
           </SidebarRoute>
         </SideBtnWrap>
       </SidebarWrapper>

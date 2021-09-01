@@ -18,7 +18,6 @@ import { useEffect } from "react";
 import { useSelector } from "../../utils/Store";
 
 export const Navbar = (): JSX.Element => {
-  // const [user] = useUserCtx();
   const { user } = useSelector((state) => state.user);
   const { menus, toggleSidebar } = useNavAndSide();
   const [scrollNav, setScrollNav] = useState(false);

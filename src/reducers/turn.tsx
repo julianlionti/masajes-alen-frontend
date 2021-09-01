@@ -13,16 +13,19 @@ export type TurnProps = {
   duration: number;
   updatedAt: string;
   _id: string;
+  state: "pendiente" | "cancelado" | "finalizado";
 };
 
 export type TurnState = {
   turns: TurnProps[] | null;
+  myTurns: TurnProps[] | null;
   loading: boolean;
   error: string;
   success: string;
 };
 const initialState: TurnState = {
   turns: null,
+  myTurns: null,
   loading: false,
   error: "",
   success: "",
@@ -30,6 +33,11 @@ const initialState: TurnState = {
 
 export const getTurns = createAsyncThunk<TurnProps[]>("turn", async () => {
   const { data } = await makeRequest({ url: Urls.turn });
+  return data;
+});
+
+export const getMyTurns = createAsyncThunk<TurnProps[]>("turn/me", async () => {
+  const { data } = await makeRequest({ url: Urls.myturns });
   return data;
 });
 
@@ -68,6 +76,11 @@ const turnSlice = createSlice({
 
     builder.addCase(getTurns.fulfilled, (state, action) => {
       state.turns = action.payload;
+      state.loading = false;
+    });
+
+    builder.addCase(getMyTurns.fulfilled, (state, action) => {
+      state.myTurns = action.payload;
       state.loading = false;
     });
 
