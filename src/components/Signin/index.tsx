@@ -37,7 +37,6 @@ export const Singin = (): JSX.Element => {
   useEffect(() => {
     const userInfo = Cookies.get(Config.USER_KEY);
     if (user && userInfo) {
-      console.log(state);
       history.replace(state?.from || "/");
     }
     if (user && !userInfo) {

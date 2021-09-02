@@ -7,6 +7,9 @@ import { Button } from "../components/ButtonElement";
 import { MyTurns } from "../components/MyTurns/MyTurns";
 import { ScreenContainer } from "../components/ScreenContainer/ScreenContainer";
 import { cleanUser } from "../reducers/user";
+import Config from "../utils/Config";
+import Cookies from "../utils/Cookies";
+import { auth } from "../utils/firebaseConfig";
 import { useSelector } from "../utils/Store";
 
 const Title = styled.h2`
@@ -31,8 +34,10 @@ const MyProfileScreen = (): JSX.Element => {
 
   const { user } = useSelector(({ user }) => user);
   useEffect(() => {
-    if (!user) {
+    const userInfo = Cookies.get(Config.USER_KEY);
+    if (user && !userInfo) {
       history.replace("/");
+      auth.signOut();
     }
   }, [user, history]);
 
