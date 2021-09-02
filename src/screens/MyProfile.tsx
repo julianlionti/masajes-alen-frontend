@@ -30,7 +30,8 @@ const MyProfileScreen = (): JSX.Element => {
   const dispatch = useDispatch();
   const handleCerrar = useCallback(() => {
     dispatch(cleanUser());
-  }, [dispatch]);
+    history.replace("/");
+  }, [dispatch, history]);
 
   const { user } = useSelector(({ user }) => user);
   useEffect(() => {
