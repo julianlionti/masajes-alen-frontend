@@ -36,8 +36,7 @@ const MyProfileScreen = (): JSX.Element => {
   useEffect(() => {
     const userInfo = Cookies.get(Config.USER_KEY);
     if (user && !userInfo) {
-      history.replace("/");
-      auth.signOut();
+      auth.signOut().then(() => history.replace("/"));
     }
   }, [user, history]);
 
