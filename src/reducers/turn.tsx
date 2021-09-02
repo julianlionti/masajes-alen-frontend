@@ -6,6 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import { makeRequest } from "../utils/makeRequest";
 import Urls from "../utils/Urls";
+import { UserProps } from "./user";
 
 export type TurnStates = "pendiente" | "cancelado" | "finalizado";
 export type TurnProps = {
@@ -15,6 +16,7 @@ export type TurnProps = {
   updatedAt: string;
   _id: string;
   state: TurnStates;
+  userInfo: UserProps;
 };
 
 export type TurnState = {
