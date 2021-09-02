@@ -6,7 +6,11 @@ import styled from "styled-components";
 import { TurnProps, TurnStates } from "../../reducers/turn";
 import ReactTooltip from "react-tooltip";
 
-import { faCalendarAlt, faClock } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendarAlt,
+  faClock,
+  faUserCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { memo } from "react";
 import { useSelector } from "../../utils/Store";
 import { Actions } from "./Actions";
@@ -35,7 +39,7 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  line-height: 25px;
+  line-height: 30px;
 `;
 
 const Small = styled.small`
@@ -51,8 +55,10 @@ const ActionRoot = styled.div`
 export const TurnRow = memo((props: TurnProps): JSX.Element => {
   const { user } = useSelector(({ user }) => user);
   if (!user) throw Error("No se paso usuario");
+  const { admin } = user;
 
-  const { state, day, createdAt } = props;
+  const { state, day, createdAt, userInfo } = props;
+  const { displayName, email } = userInfo;
 
   const today = moment();
   const turnDay = moment(day);
@@ -72,6 +78,8 @@ export const TurnRow = memo((props: TurnProps): JSX.Element => {
     if (diff < 0) return "Tu turno fue ayer ";
   }, [diff, diffHours]);
 
+  console.log(userInfo);
+
   return (
     <Card state={state}>
       <Body>
@@ -80,6 +88,15 @@ export const TurnRow = memo((props: TurnProps): JSX.Element => {
           <i>{` Fecha y Hora del Turno: `}</i>
           <b>{turnDay.format("LLL")}</b>
         </span>
+        {admin && (
+          <span>
+            <FontAwesomeIcon color={"#b2b2b2"} icon={faUserCircle} />
+            Turno pedido por:{" "}
+            <b>
+              {displayName} ({email})
+            </b>
+          </span>
+        )}
         <span>
           <FontAwesomeIcon color={"#b2b2b2"} icon={faCalendarAlt} />
           {` ${remainingDaysText}`}
