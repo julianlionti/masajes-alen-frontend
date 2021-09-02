@@ -2,11 +2,13 @@ import styled from "styled-components";
 import { primaryColor, primaryColorDark } from "../ButtonElement";
 import { Loading } from "../Loading";
 import { Icon } from "../Signin/SiginElements";
+import CustomScroll from "react-scrollbars-custom";
 
 type Props = React.PropsWithChildren<{ title: string; loading?: boolean }>;
 
 const Root = styled.div`
-  min-height: 692px;
+  height: 100vh;
+  overflow-y: auto;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -37,6 +39,17 @@ const Content = styled.div`
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0, 9);
   margin-top: 16px;
+`;
+
+const Scroll = styled(CustomScroll)`
+  height: 450px !important;
+
+  @media screen and (max-width: 480px) {
+    height: 400px !important;
+  }
+`;
+
+const FlexDIv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -49,7 +62,11 @@ export const ScreenContainer = (props: Props): JSX.Element => {
       <Loading show={loading} />
       <Wrapper>
         <Icon to="/">{title}</Icon>
-        <Content>{children}</Content>
+        <Content>
+          <Scroll>
+            <FlexDIv>{children}</FlexDIv>
+          </Scroll>
+        </Content>
       </Wrapper>
     </Root>
   );

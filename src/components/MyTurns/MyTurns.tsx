@@ -16,7 +16,6 @@ export const MyTurns = (): JSX.Element => {
   return (
     <div>
       <Loading show={loading} />
-      <span>Mis turnos</span>
       {myTurns?.map((e) => (
         <TurnRow key={e._id} {...e} />
       ))}

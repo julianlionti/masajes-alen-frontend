@@ -22,6 +22,9 @@ import { useRef } from "react";
 import { AlertDialog } from "../AlertDialog/AlertDialog";
 import { useDispatch } from "react-redux";
 import { cleanPostedTurn, postTurn } from "../../reducers/turn";
+import { useHistory } from "react-router-dom";
+import Cookies from "../../utils/Cookies";
+import Config from "../../utils/Config";
 
 const sessionTime = 40;
 const hours = [
@@ -55,9 +58,12 @@ type TurnConfirmation = {
 };
 
 export const Turns = (): JSX.Element => {
+  const history = useHistory();
+  // const { user } = useSelector(({ user }) => user);
   // const [user] = useUserCtx();
   const dispatch = useDispatch();
   const turnRef = useRef<TurnConfirmation | null>(null);
+  const [mustLogin, setMustLogin] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { loading, turns, error, success } = useSelector(({ turn }) => turn);
 
@@ -80,6 +86,12 @@ export const Turns = (): JSX.Element => {
       .map((_, i) => firstDay.clone().add(i, "d"));
 
     const onTurn = async (day: Moment, start: number) => {
+      const userToken = Cookies.get(Config.USER_KEY);
+      if (!userToken) {
+        setMustLogin(true);
+        return;
+      }
+
       const duration = `${start}:00 - ${start}.${sessionTime}`;
       day.set("h", start);
       const dayInMonth = day.date();
@@ -176,6 +188,25 @@ export const Turns = (): JSX.Element => {
           )
         }
       />
+      <AlertDialog
+        title="Masajes Alen"
+        icon="information"
+        subtitle={
+          <span>
+            Para sacar un turno es <b>necesario</b> iniciar sesión
+            <br />
+            Haga click en <b>aceptar</b> y será reirigido
+          </span>
+        }
+        show={mustLogin}
+        onClose={(wasAccepted) => {
+          setMustLogin(false);
+
+          if (wasAccepted) {
+            history.replace("/signin", { from: "turns" });
+          }
+        }}
+      ></AlertDialog>
     </ScreenContainer>
   );
 };

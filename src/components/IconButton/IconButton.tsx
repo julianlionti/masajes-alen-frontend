@@ -21,7 +21,12 @@ const Button = styled.button<StyleProps>`
 
   opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
   cursor: ${({ disabled }) =>
-    disabled ? "not-allowed !important" : "pointer"}; ;
+    disabled ? "not-allowed !important" : "pointer"};
+
+  &:hover {
+    background-color: #e7e7e7;
+    color: white;
+  }
 `;
 
 export const IconButton = (props: Props): JSX.Element => {

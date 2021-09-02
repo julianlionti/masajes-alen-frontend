@@ -7,13 +7,14 @@ import {
 import { makeRequest } from "../utils/makeRequest";
 import Urls from "../utils/Urls";
 
+export type TurnStates = "pendiente" | "cancelado" | "finalizado";
 export type TurnProps = {
   day: string;
   createdAt: string;
   duration: number;
   updatedAt: string;
   _id: string;
-  state: "pendiente" | "cancelado" | "finalizado";
+  state: TurnStates;
 };
 
 export type TurnState = {
@@ -55,6 +56,20 @@ export const postTurn = createAsyncThunk<TurnProps, TurnPost>(
   }
 );
 
+type TurnPut = { id: string; state: TurnStates };
+export const editTurn = createAsyncThunk<TurnProps, TurnPut>(
+  "turn/edit",
+  async ({ id, state }) => {
+    const { data } = await makeRequest({
+      url: `${Urls.turn}/${id}`,
+      method: "PUT",
+      data: { state },
+    });
+
+    return data;
+  }
+);
+
 const turnSlice = createSlice({
   name: "turn",
   initialState,
@@ -81,6 +96,15 @@ const turnSlice = createSlice({
 
     builder.addCase(getMyTurns.fulfilled, (state, action) => {
       state.myTurns = action.payload;
+      state.loading = false;
+    });
+
+    builder.addCase(editTurn.fulfilled, (state, action) => {
+      const edited = action.payload;
+      state.myTurns = state.myTurns.map((e) => {
+        if (e._id === edited._id) return edited;
+        return e;
+      });
       state.loading = false;
     });
 
