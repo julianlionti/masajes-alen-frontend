@@ -1,6 +1,14 @@
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
 import { login } from "../../reducers/user";
-import { fbAuthProvider, googleAuthProvider } from "../../utils/firebaseConfig";
+import Config from "../../utils/Config";
+import Cookies from "../../utils/Cookies";
+import {
+  auth,
+  fbAuthProvider,
+  googleAuthProvider,
+} from "../../utils/firebaseConfig";
 import { useSelector } from "../../utils/Store";
 import { Loading } from "../Loading";
 
@@ -15,11 +23,28 @@ import {
   FacebookIcon,
   SocialText,
   GoogleIcon,
+  ErrorRoot,
+  ErrorP,
 } from "./SiginElements";
 
+type SiginState = { from: string };
 export const Singin = (): JSX.Element => {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.user);
+  const history = useHistory();
+  const { state } = useLocation<SiginState>();
+  const { loading, user, error } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const userInfo = Cookies.get(Config.USER_KEY);
+    if (user && userInfo) {
+      console.log(state);
+      history.replace(state?.from || "/");
+    }
+    if (user && !userInfo) {
+      auth.signOut();
+    }
+  }, [user, history, state]);
+
   return (
     <Container>
       <FormWrap>
@@ -41,6 +66,11 @@ export const Singin = (): JSX.Element => {
               <GoogleIcon />
               <SocialText>Iniciar sesion con Google</SocialText>
             </SocialButton>
+            {error && (
+              <ErrorRoot>
+                <ErrorP>{error}</ErrorP>
+              </ErrorRoot>
+            )}
           </Form>
         </FormContent>
       </FormWrap>

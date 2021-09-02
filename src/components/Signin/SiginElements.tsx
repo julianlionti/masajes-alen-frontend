@@ -113,3 +113,16 @@ export const SocialText = styled.p`
   font-size: 18px;
   margin-left: 16px;
 `;
+
+export const ErrorRoot = styled.div`
+  display: flex;
+`;
+
+export const ErrorP = styled.p`
+  padding: 18px;
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  flex: 1;
+  text-align: center;
+`;

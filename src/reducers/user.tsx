@@ -2,10 +2,25 @@ import storage from "redux-persist/es/storage";
 import { persistReducer } from "redux-persist";
 import { PersistConfig } from "redux-persist/es/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AuthProvider, getAuth, signInWithPopup } from "firebase/auth";
-import { app } from "../utils/firebaseConfig";
+import {
+  AuthProvider,
+  FacebookAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth } from "../utils/firebaseConfig";
+import axios, { AxiosError } from "axios";
+import Urls from "../utils/Urls";
+import Config from "../utils/Config";
+import Cookies from "../utils/Cookies";
 
-export type UserProps = { displayName: string; email: string };
+export type UserProps = {
+  displayName: string;
+  email: string;
+  uid: string;
+  token: string;
+  admin: boolean;
+};
+
 export type UserState = {
   user: UserProps | null;
   loading: boolean;
@@ -20,15 +35,41 @@ const initialState: UserState = {
 export const login = createAsyncThunk<UserProps, AuthProvider>(
   "user/login",
   async (provider) => {
-    const auth = getAuth(app);
-    auth.languageCode = "es";
+    await auth.signOut();
 
-    const user = await signInWithPopup(auth, provider);
+    let user: UserProps | null = null;
+    if (Config.NODE_ENV !== "development") {
+      const { user: fbUser } = await signInWithPopup(auth, provider);
+      const token = await fbUser.getIdToken();
+      const { displayName, email, uid } = fbUser;
+      user = { displayName, email, uid, token, admin: false };
+    } else {
+      const isFb = provider instanceof FacebookAuthProvider;
+      user = {
+        admin: true,
+        displayName: "Prueba2",
+        email: `prueba@${isFb ? "fb" : "google"}.com`,
+        uid: isFb
+          ? "zktlgAweWxgHZuFG9P7uF1iYllf1"
+          : "zktlgAweWxgHZh3s1P7uF1iYllf1",
+        token: isFb
+          ? "eysadmansdjklashodjkahsdjlka"
+          : "eyaskdplp2k3lñ2wkñl2k32ñl3k2ñl3k",
+      };
+    }
 
-    console.log(user);
-    console.log("Pasaje");
-
-    return { displayName: "asda", email: "sada", meta: "asd", payload: "asd" };
+    try {
+      Cookies.set(Config.USER_KEY, user.token, {
+        path: "/",
+        maxAge: 60 * 60 * 24,
+      });
+      const { data } = await axios.post(Urls.user, user);
+      return { ...user, admin: data.admin };
+    } catch (ex) {
+      const error = ex as AxiosError;
+      const { response } = error.request || {};
+      throw Error(response);
+    }
   }
 );
 
@@ -37,20 +78,24 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     cleanUser: () => {
+      auth.signOut();
+      Cookies.remove(Config.USER_KEY);
       return initialState;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state) => {
       state.loading = true;
+      state.user = null;
     });
     builder.addCase(login.rejected, (state, action) => {
-      console.log(action);
-      state.error = "Ocurrió un error";
+      const error = JSON.parse(action.error.message || "{}");
+      state.error = `(${error.code}) ${error.message}`;
       state.loading = false;
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.user = action.payload;
+      state.loading = false;
     });
   },
 });

@@ -18,7 +18,6 @@ import { useEffect } from "react";
 import { useSelector } from "../../utils/Store";
 
 export const Navbar = (): JSX.Element => {
-  // const [user] = useUserCtx();
   const { user } = useSelector((state) => state.user);
   const { menus, toggleSidebar } = useNavAndSide();
   const [scrollNav, setScrollNav] = useState(false);
@@ -54,7 +53,7 @@ export const Navbar = (): JSX.Element => {
             ))}
           </NavMenu>
           <NavBtn>
-            <NavBtnLink to="signin">{`${
+            <NavBtnLink to={user ? "myprofile" : "signin"}>{`${
               !user ? `Iniciar Sesión` : "Mi cuenta"
             }`}</NavBtnLink>
           </NavBtn>

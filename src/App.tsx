@@ -7,6 +7,7 @@ import "firebase/analytics";
 import "firebase/auth";
 import { Provider } from "react-redux";
 import { persistor, store } from "./utils/Store";
+import MyProfileScreen from "./screens/MyProfile";
 
 const Landing = lazy(() => import("./screens/Landing"));
 const SigninScreen = lazy(() => import("./screens/Signin"));
@@ -22,6 +23,7 @@ export const App = (): JSX.Element => {
               <Route path="/" component={Landing} exact />
               <Route path="/signin" component={SigninScreen} exact />
               <Route path="/turns" component={TurnsScreen} exact />
+              <Route path="/myprofile" component={MyProfileScreen} exact />
             </Suspense>
           </Switch>
         </BrowserRouter>

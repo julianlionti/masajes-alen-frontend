@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "npx parcel src/index.html --https --open",
+    "start": "npx parcel serve src/index.html",
     "build": "npx parcel build src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
@@ -11,10 +11,17 @@
   },
   "keywords": [],
   "author": "",
+  "engines": {
+    "node": ">=12.x"
+  },
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.15",
     "@reduxjs/toolkit": "^1.6.1",
     "axios": "^0.21.1",
+    "dot-prop-immutable": "^2.1.1",
     "firebase": "^9.0.1",
     "moment": "^2.29.1",
     "react": "^17.0.2",
@@ -26,10 +33,16 @@
     "react-scroll": "^1.8.3",
     "react-scrollbars-custom": "^4.0.25",
     "react-spinners": "^0.11.0",
+    "react-tooltip": "^4.2.21",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
-    "styled-components": "^5.3.0"
+    "styled-components": "^5.3.0",
+    "universal-cookie": "^4.0.4"
   },
+  "browserslist": [
+    "> 0.2%",
+    "not dead"
+  ],
   "devDependencies": {
     "@parcel/transformer-typescript-tsc": "2.0.0-beta.1",
     "@types/react": "^17.0.15",
