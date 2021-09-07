@@ -6,6 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import { FilterState } from "../screens/MyProfile";
 import { makeRequest } from "../utils/makeRequest";
+import { parseRejected } from "../utils/redux";
 import Urls from "../utils/Urls";
 import { UserProps } from "./user";
 
@@ -117,17 +118,19 @@ const turnSlice = createSlice({
       state.loading = false;
     });
 
-    builder.addMatcher(isPending, (state) => {
-      state.loading = true;
-      state.error = "";
-    });
-    builder.addMatcher(isRejected, (state, action) => {
-      const { error } = action;
-      const { message } = error || {};
-      const final = JSON.parse(message || "{}");
-      state.error = `(${final.code}) ${final.message}`;
-      state.loading = false;
-    });
+    builder.addMatcher(
+      isPending(postTurn, getTurns, getMyTurns, editTurn),
+      (state) => {
+        state.loading = true;
+        state.error = "";
+      }
+    );
+    builder.addMatcher(
+      isRejected(postTurn, getTurns, getMyTurns, editTurn),
+      (state, action) => {
+        parseRejected(state, action);
+      }
+    );
   },
 });
 

@@ -2,16 +2,13 @@ import storage from "redux-persist/es/storage";
 import { persistReducer } from "redux-persist";
 import { PersistConfig } from "redux-persist/es/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  AuthProvider,
-  FacebookAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
+import { AuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../utils/firebaseConfig";
 import Urls from "../utils/Urls";
 import Config from "../utils/Config";
 import Cookies from "../utils/Cookies";
 import { makeRequest } from "../utils/makeRequest";
+import { parseRejected } from "../utils/redux";
 
 export type UserProps = {
   displayName: string;
@@ -38,36 +35,38 @@ export const login = createAsyncThunk<UserProps, AuthProvider>(
     await auth.signOut();
 
     let user: UserProps | null = null;
-    if (Config.NODE_ENV !== "development") {
-      const { user: fbUser } = await signInWithPopup(auth, provider);
-      const token = await fbUser.getIdToken();
-      const { displayName, email, uid } = fbUser;
-      user = { displayName, email, uid, token, admin: false };
-    } else {
-      const isFb = provider instanceof FacebookAuthProvider;
-      user = {
-        admin: isFb,
-        displayName: "Prueba2",
-        email: `prueba@${isFb ? "fb" : "google"}.com`,
-        uid: isFb
-          ? "zktlgAweWxgHZuFG9P7uF1iYllf1"
-          : "zktlgAweWxgHZh3s1P7uF1iYllf1",
-        token: isFb
-          ? "eysadmansdjklashodjkahsdjlka"
-          : "eyaskdplp2k3lñ2wkñl2k32ñl3k2ñl3k",
-      };
-    }
-
-    Cookies.set(Config.USER_KEY, user.token, {
-      path: "/",
-      maxAge: 60 * 60 * 24,
-    });
+    // if (Config.NODE_ENV !== "development") {
+    const { user: fbUser } = await signInWithPopup(auth, provider);
+    const token = await fbUser.getIdToken();
+    const { displayName, email, uid } = fbUser;
+    console.log(email);
+    user = { displayName, email, uid, token, admin: false };
+    // } else {
+    //   const isFb = provider instanceof FacebookAuthProvider;
+    //   user = {
+    //     admin: isFb,
+    //     displayName: "Prueba2",
+    //     email: `prueba@${isFb ? "fb" : "google"}.com`,
+    //     uid: isFb
+    //       ? "zktlgAweWxgHZuFG9P7uF1iYllf1"
+    //       : "zktlgAweWxgHZh3s1P7uF1iYllf1",
+    //     token: isFb
+    //       ? "eysadmansdjklashodjkahsdjlka"
+    //       : "eyaskdplp2k3lñ2wkñl2k32ñl3k2ñl3k",
+    //   };
+    // }
 
     const { data } = await makeRequest({
       url: Urls.user,
       data: user,
       method: "POST",
     });
+
+    Cookies.set(Config.USER_KEY, user.token, {
+      path: "/",
+      maxAge: 60 * 60 * 24,
+    });
+
     return { ...user, admin: data.admin };
   }
 );
@@ -88,9 +87,7 @@ const userSlice = createSlice({
       state.user = null;
     });
     builder.addCase(login.rejected, (state, action) => {
-      const error = JSON.parse(action.error.message || "{}");
-      state.error = `(${error.code}) ${error.message}`;
-      state.loading = false;
+      parseRejected(state, action);
     });
     builder.addCase(login.fulfilled, (state, action) => {
       state.user = action.payload;
