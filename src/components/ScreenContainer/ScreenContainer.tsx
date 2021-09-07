@@ -86,11 +86,7 @@ export const ScreenContainer = (props: Props): JSX.Element => {
       <Loading show={loading} />
       <Wrapper>
         <HorizontalDiv onClick={() => history.goBack()}>
-          <FaAngleLeft
-            onClick={() => history.goBack()}
-            size={38}
-            color="#fff"
-          />
+          <FaAngleLeft size={38} color="#fff" />
           <Title>{title}</Title>
         </HorizontalDiv>
         <Content>
