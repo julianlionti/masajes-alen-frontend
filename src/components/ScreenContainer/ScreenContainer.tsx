@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { primaryColor, primaryColorDark } from "../ButtonElement";
 import { Loading } from "../Loading";
-import { Icon } from "../Signin/SiginElements";
 import CustomScroll from "react-scrollbars-custom";
+import { FaAngleLeft } from "react-icons/fa";
+import { useHistory } from "react-router-dom";
 
 type Props = React.PropsWithChildren<{ title: string; loading?: boolean }>;
 
@@ -20,6 +21,14 @@ const Root = styled.div`
     ${primaryColor} 0%,
     ${primaryColorDark} 100%
   );
+`;
+
+const Title = styled.div`
+  color: #fff;
+  font-weight: 700;
+  font-size: 32px;
+  user-select: none;
+  margin-left: 16px;
 `;
 
 const Wrapper = styled.div`
@@ -55,13 +64,31 @@ const FlexDIv = styled.div`
   justify-content: center;
 `;
 
+const HorizontalDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 32px;
+  margin-top: 32px;
+  cursor: pointer;
+
+  @media screen and (min-width: 480px) {
+    margin-left: 16px;
+    margin-top: 8px;
+  }
+`;
+
 export const ScreenContainer = (props: Props): JSX.Element => {
   const { title, children, loading } = props;
+  const history = useHistory();
   return (
     <Root>
       <Loading show={loading} />
       <Wrapper>
-        <Icon to="/">{title}</Icon>
+        <HorizontalDiv onClick={() => history.goBack()}>
+          <FaAngleLeft size={38} color="#fff" />
+          <Title>{title}</Title>
+        </HorizontalDiv>
         <Content>
           <Scroll>
             <FlexDIv>{children}</FlexDIv>
