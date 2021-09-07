@@ -65,6 +65,8 @@ export const TurnRow = memo((props: TurnProps): JSX.Element => {
   const diff = turnDay.diff(today, "d");
   const diffHours = diff < 2 ? turnDay.diff(today, "h") : undefined;
 
+  const noCancel = diff < 2 && !admin;
+
   const remainingDaysText = useMemo(() => {
     if (diff === 0) {
       if (diffHours < 0) return "Tu turno fue hoy ";
@@ -107,7 +109,7 @@ export const TurnRow = memo((props: TurnProps): JSX.Element => {
               se encuentra en estado <b>{state}</b>
             </Small>
           </div>
-          <Actions {...props} />
+          <Actions {...props} noCancel={noCancel} />
         </ActionRoot>
       </Body>
       <ReactTooltip />

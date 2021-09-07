@@ -124,5 +124,4 @@ export const ErrorP = styled.p`
   background-color: #f8d7da;
   border-color: #f5c6cb;
   flex: 1;
-  text-align: center;
 `;

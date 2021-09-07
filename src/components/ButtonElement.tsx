@@ -5,7 +5,7 @@ import { Link as LinkS, LinkProps as LinkPropsS } from "react-scroll";
 import styled from "styled-components";
 
 type ButtonProps = Partial<
-  Record<"primary" | "dark" | "big" | "fontBig", boolean>
+  Record<"primary" | "dark" | "big" | "fontBig" | "disabled", boolean>
 >;
 
 export const primaryColor = "#EA80E3"; // "#01bf71"
@@ -20,7 +20,7 @@ const StyledBtn = styled.div<ButtonProps>`
   font-size: ${({ fontBig }) => (fontBig ? "20px" : "16px")};
   outline: none;
   border: none;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
   display: flex;
   justify-content: center;
   align-items: center;

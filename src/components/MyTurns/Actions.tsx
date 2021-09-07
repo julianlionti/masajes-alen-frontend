@@ -14,12 +14,12 @@ const HorizontalDiv = styled.div`
   display: flex;
 `;
 
-type Props = TurnProps;
+type Props = { noCancel?: boolean } & TurnProps;
 export const Actions = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { user } = useSelector(({ user }) => user);
   if (!user) throw Error("No se paso usuario");
-  const { state, _id } = props;
+  const { state, _id, noCancel } = props;
   const { admin } = user;
 
   const edit = useCallback(
@@ -35,7 +35,11 @@ export const Actions = (props: Props): JSX.Element => {
 
   return (
     <HorizontalDiv>
-      <IconButton data-tip="Cancelar turno" onClick={edit("cancelado")}>
+      <IconButton
+        disabled={noCancel}
+        data-tip="Cancelar turno"
+        onClick={edit("cancelado")}
+      >
         <FontAwesomeIcon size={"2x"} color="red" icon={faTimesCircle} />
       </IconButton>
       {admin && (

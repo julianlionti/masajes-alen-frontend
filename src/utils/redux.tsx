@@ -1,32 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { PayloadAction, SerializedError } from "@reduxjs/toolkit";
+import { AnyAction, CaseReducer } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
 
 type RejetedState = { error: string; loading: boolean };
 
-export const parseRejected = (
-  state: WritableDraft<RejetedState>,
-  action: PayloadAction<
-    unknown,
-    string,
-    {
-      arg: any;
-      requestId: string;
-      requestStatus: "rejected";
-      aborted: boolean;
-      condition: boolean;
-    } & (
-      | { rejectedWithValue: true }
-      | ({ rejectedWithValue: false } & Record<string, any>)
-    ),
-    SerializedError
-  >
+export const parseRejected: CaseReducer<any, AnyAction> = (
+  state,
+  action
 ): void | WritableDraft<RejetedState> => {
-  const { message } = action.error;
-  const isObj = typeof message === "object";
-  const error = isObj ? JSON.parse(message || "{}") : message;
-  console.log(isObj, message);
+  const actionMessage = action.error.message;
 
-  state.error = isObj ? `(${error.code}) ${error.message}` : message;
+  try {
+    const mcError = JSON.parse(actionMessage || "{}");
+    const { error, errors, message, code } = mcError;
+    if (message && code) {
+      state.error = `(${code}) ${message}`;
+    }
+    if (error) {
+      state.error = `(${error.code}) ${error.message}`;
+    }
+    if (errors) {
+      state.error = errors
+        .map((e: any) => `(${e.code}) ${e.message}`)
+        .join("\n");
+    }
+  } catch {
+    state.error = actionMessage;
+  }
+
   state.loading = false;
 };
+
+export const isRejectedAction =
+  (prefixName: string) =>
+  (action: AnyAction): boolean =>
+    action.type.startsWith(prefixName) && action.type.endsWith("rejected");
