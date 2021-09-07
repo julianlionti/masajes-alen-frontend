@@ -8,10 +8,10 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "../utils/firebaseConfig";
-import axios, { AxiosError } from "axios";
 import Urls from "../utils/Urls";
 import Config from "../utils/Config";
 import Cookies from "../utils/Cookies";
+import { makeRequest } from "../utils/makeRequest";
 
 export type UserProps = {
   displayName: string;
@@ -46,7 +46,7 @@ export const login = createAsyncThunk<UserProps, AuthProvider>(
     } else {
       const isFb = provider instanceof FacebookAuthProvider;
       user = {
-        admin: true,
+        admin: isFb,
         displayName: "Prueba2",
         email: `prueba@${isFb ? "fb" : "google"}.com`,
         uid: isFb
@@ -58,18 +58,17 @@ export const login = createAsyncThunk<UserProps, AuthProvider>(
       };
     }
 
-    try {
-      Cookies.set(Config.USER_KEY, user.token, {
-        path: "/",
-        maxAge: 60 * 60 * 24,
-      });
-      const { data } = await axios.post(Urls.user, user);
-      return { ...user, admin: data.admin };
-    } catch (ex) {
-      const error = ex as AxiosError;
-      const { response } = error.request || {};
-      throw Error(response);
-    }
+    Cookies.set(Config.USER_KEY, user.token, {
+      path: "/",
+      maxAge: 60 * 60 * 24,
+    });
+
+    const { data } = await makeRequest({
+      url: Urls.user,
+      data: user,
+      method: "POST",
+    });
+    return { ...user, admin: data.admin };
   }
 );
 

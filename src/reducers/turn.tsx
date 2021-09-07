@@ -4,6 +4,7 @@ import {
   isPending,
   isRejected,
 } from "@reduxjs/toolkit";
+import { FilterState } from "../screens/MyProfile";
 import { makeRequest } from "../utils/makeRequest";
 import Urls from "../utils/Urls";
 import { UserProps } from "./user";
@@ -39,10 +40,18 @@ export const getTurns = createAsyncThunk<TurnProps[]>("turn", async () => {
   return data;
 });
 
-export const getMyTurns = createAsyncThunk<TurnProps[]>("turn/me", async () => {
-  const { data } = await makeRequest({ url: Urls.myturns });
-  return data;
-});
+export const getMyTurns = createAsyncThunk<TurnProps[], FilterState>(
+  "turn/me",
+  async (filters) => {
+    console.log(filters);
+    const { data } = await makeRequest({
+      url: Urls.myturns,
+      params: filters,
+    });
+
+    return data;
+  }
+);
 
 type TurnPost = { day: string };
 export const postTurn = createAsyncThunk<TurnProps, TurnPost>(
@@ -67,7 +76,7 @@ export const editTurn = createAsyncThunk<TurnProps, TurnPut>(
       method: "PUT",
       data: { state },
     });
-
+    console.log("data", data);
     return data;
   }
 );
@@ -103,6 +112,7 @@ const turnSlice = createSlice({
 
     builder.addCase(editTurn.fulfilled, (state, action) => {
       const edited = action.payload;
+      console.log(edited);
       state.myTurns = state.myTurns.map((e) => {
         if (e._id === edited._id) return edited;
         return e;

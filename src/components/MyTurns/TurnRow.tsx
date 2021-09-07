@@ -78,8 +78,6 @@ export const TurnRow = memo((props: TurnProps): JSX.Element => {
     if (diff < 0) return "Tu turno fue ayer ";
   }, [diff, diffHours]);
 
-  console.log(userInfo);
-
   return (
     <Card state={state}>
       <Body>

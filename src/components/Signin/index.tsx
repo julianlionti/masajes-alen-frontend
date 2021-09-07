@@ -1,14 +1,10 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-import { login } from "../../reducers/user";
+import { cleanUser, login } from "../../reducers/user";
 import Config from "../../utils/Config";
 import Cookies from "../../utils/Cookies";
-import {
-  auth,
-  fbAuthProvider,
-  googleAuthProvider,
-} from "../../utils/firebaseConfig";
+import { fbAuthProvider, googleAuthProvider } from "../../utils/firebaseConfig";
 import { useSelector } from "../../utils/Store";
 import { Loading } from "../Loading";
 
@@ -36,13 +32,10 @@ export const Singin = (): JSX.Element => {
 
   useEffect(() => {
     const userInfo = Cookies.get(Config.USER_KEY);
-    if (user && userInfo) {
-      history.replace(state?.from || "/");
-    }
-    if (user && !userInfo) {
-      auth.signOut();
-    }
-  }, [user, history, state]);
+
+    if (user && !userInfo) dispatch(cleanUser());
+    if (user && userInfo) history.replace(state?.from || "/");
+  }, [dispatch, user, history, state]);
 
   return (
     <Container>
