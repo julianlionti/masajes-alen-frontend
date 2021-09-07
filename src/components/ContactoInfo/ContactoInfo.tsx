@@ -15,8 +15,6 @@ export const ContactoInfo = (): JSX.Element => {
     cel: user?.cel || "",
   };
 
-  console.log(user);
-
   return (
     <Formik
       initialValues={initialValues}
