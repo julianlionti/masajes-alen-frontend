@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "npx parcel serve src/index.html",
+    "start": "npx parcel serve src/index.html --https --cert C:/Users/Tano/localhost.cert",
     "build": "npx parcel build src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",

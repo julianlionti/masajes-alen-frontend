@@ -22,5 +22,6 @@ auth.languageCode = "es";
 
 const googleAuthProvider = new GoogleAuthProvider();
 const fbAuthProvider = new FacebookAuthProvider();
+fbAuthProvider.addScope("email");
 
 export { auth, analytics, googleAuthProvider, fbAuthProvider };
