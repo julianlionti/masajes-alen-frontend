@@ -43,7 +43,6 @@ export const getTurns = createAsyncThunk<TurnProps[]>("turn", async () => {
 export const getMyTurns = createAsyncThunk<TurnProps[], FilterState>(
   "turn/me",
   async (filters) => {
-    console.log(filters);
     const { data } = await makeRequest({
       url: Urls.myturns,
       params: filters,
@@ -76,7 +75,6 @@ export const editTurn = createAsyncThunk<TurnProps, TurnPut>(
       method: "PUT",
       data: { state },
     });
-    console.log("data", data);
     return data;
   }
 );
@@ -112,7 +110,6 @@ const turnSlice = createSlice({
 
     builder.addCase(editTurn.fulfilled, (state, action) => {
       const edited = action.payload;
-      console.log(edited);
       state.myTurns = state.myTurns.map((e) => {
         if (e._id === edited._id) return edited;
         return e;

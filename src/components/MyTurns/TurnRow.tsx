@@ -66,8 +66,10 @@ export const TurnRow = memo((props: TurnProps): JSX.Element => {
   const diffHours = diff < 2 ? turnDay.diff(today, "h") : undefined;
 
   const remainingDaysText = useMemo(() => {
+    console.log(diff, diffHours, day);
     if (diff === 0) {
       if (diffHours < 0) return "Tu turno fue hoy ";
+      if (diffHours < 24) return `Faltan ${diffHours} horas para tu turno`;
       return "Tu turno es hoy ";
     }
     if (diff === 1) {
