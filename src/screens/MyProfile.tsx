@@ -13,6 +13,7 @@ import { useSelector } from "../utils/Store";
 import Switch from "react-switch";
 import { useState } from "react";
 import { getMyTurns } from "../reducers/turn";
+import { PersonalInfo } from "../components/PersonalInfo/PersonalInfo";
 
 const Title = styled.h2`
   padding: 10px 0px;
@@ -116,6 +117,7 @@ const MyProfileScreen = (): JSX.Element => {
       <MyTurns />
       <Title>Opciones de mi Cuenta</Title>
       <Separator />
+      <PersonalInfo />
       <CenteredDiv>
         <Button onClick={handleCerrar}>Cerrar sesion</Button>
       </CenteredDiv>

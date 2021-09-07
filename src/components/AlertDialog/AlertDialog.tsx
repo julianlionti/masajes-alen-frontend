@@ -53,7 +53,7 @@ const CenteredTitle = styled.h2`
   text-align: center;
 `;
 
-const CenteredP = styled.p`
+const CenteredDiv = styled.div`
   text-align: center;
   margin-top: 8px;
 `;
@@ -142,7 +142,7 @@ export const AlertDialog = (props: Props): JSX.Element => {
         {renderIcon()}
         <Body>
           <CenteredTitle>{title}</CenteredTitle>
-          {subtitle && <CenteredP>{subtitle}</CenteredP>}
+          {subtitle && <CenteredDiv>{subtitle}</CenteredDiv>}
         </Body>
         {(finalBtns?.includes("cancel") || finalBtns?.includes("accept")) && (
           <Footer>

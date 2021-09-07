@@ -3,7 +3,7 @@ import { useState } from "react";
 import { createContext } from "react";
 import { useContext } from "react";
 
-type MenuProps = { route: string; title: string };
+type MenuProps = { route: string; title: string; redirect?: boolean };
 interface NavAndSideCtx extends ProviderProps {
   toggleSidebar: () => void;
 }

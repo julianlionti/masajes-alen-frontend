@@ -55,7 +55,7 @@ const Landing = (): JSX.Element => {
     <NavAndSide
       menus={[
         { route: "services", title: "Servicios" },
-        { route: "turns", title: "Turnos" },
+        { route: "turns", title: "Turnos", redirect: true },
         { route: "map", title: "Ubicación" },
       ]}
     >

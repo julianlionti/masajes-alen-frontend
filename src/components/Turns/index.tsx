@@ -25,6 +25,7 @@ import { cleanPostedTurn, postTurn } from "../../reducers/turn";
 import { useHistory } from "react-router-dom";
 import Cookies from "../../utils/Cookies";
 import Config from "../../utils/Config";
+import { ContactAlert } from "../ContactoInfo/ContactAlert";
 
 const sessionTime = 40;
 const hours = [
@@ -59,20 +60,35 @@ type TurnConfirmation = {
 
 export const Turns = (): JSX.Element => {
   const history = useHistory();
-  // const { user } = useSelector(({ user }) => user);
-  // const [user] = useUserCtx();
+  const [showContactInfo, setShowContactInfo] = useState(false);
   const dispatch = useDispatch();
   const turnRef = useRef<TurnConfirmation | null>(null);
   const [mustLogin, setMustLogin] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { loading, turns, error, success } = useSelector(({ turn }) => turn);
+  const { user } = useSelector(({ user }) => user);
 
   const [date, setDate] = useState(tomorrow);
 
   const onConfirmated = useCallback(
     (wasAccepted) => {
       setShowConfirmation(false);
-      if (wasAccepted && turnRef.current) {
+
+      if (!user.email) {
+        setShowContactInfo(true);
+      } else {
+        if (wasAccepted && turnRef.current) {
+          dispatch(postTurn({ day: turnRef.current.day.toDate().toString() }));
+        }
+      }
+    },
+    [dispatch, user]
+  );
+
+  const handleContactInfo = useCallback(
+    (accepted) => {
+      setShowContactInfo(false);
+      if (accepted && turnRef.current) {
         dispatch(postTurn({ day: turnRef.current.day.toDate().toString() }));
       }
     },
@@ -171,6 +187,7 @@ export const Turns = (): JSX.Element => {
           )
         }
       />
+      <ContactAlert show={showContactInfo} onClose={handleContactInfo} />
 
       <AlertDialog
         btns={["close"]}
