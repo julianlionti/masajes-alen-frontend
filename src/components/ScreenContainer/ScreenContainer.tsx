@@ -51,11 +51,11 @@ const Content = styled.div`
 `;
 
 const Scroll = styled(CustomScroll)`
-  height: 450px !important;
+  height: 472px !important;
+  /* height: 450px !important;
 
   @media screen and (max-width: 480px) {
-    height: 450px !important;
-  }
+  } */
 `;
 
 const FlexDIv = styled.div`
