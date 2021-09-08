@@ -6,9 +6,18 @@ import { ContactAlert } from "../ContactoInfo/ContactAlert";
 
 const HorizontalDiv = styled.div`
   display: flex;
+  flex-direction: row !important;
   justify-content: space-around;
   align-items: center;
   margin: 20px 0px;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column !important;
+  }
+`;
+
+const ItemRoot = styled.div`
+  margin-bottom: 8px;
 `;
 
 export const PersonalInfo = (): JSX.Element => {
@@ -17,14 +26,14 @@ export const PersonalInfo = (): JSX.Element => {
   const { email, cel } = user || {};
   return (
     <HorizontalDiv>
-      <div>
+      <ItemRoot>
         <b>E-Mail: </b>
         <span>{email || "-"}</span>
-      </div>
-      <div>
+      </ItemRoot>
+      <ItemRoot>
         <b>Celular: </b>
         <span>{cel || "-"}</span>
-      </div>
+      </ItemRoot>
       <Button primary onClick={() => setEdit(true)}>
         Editar Datos
       </Button>

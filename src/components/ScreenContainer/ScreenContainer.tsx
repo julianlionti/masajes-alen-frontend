@@ -54,7 +54,7 @@ const Scroll = styled(CustomScroll)`
   height: 450px !important;
 
   @media screen and (max-width: 480px) {
-    height: 400px !important;
+    height: 450px !important;
   }
 `;
 

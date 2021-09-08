@@ -165,7 +165,7 @@ export const Turns = (): JSX.Element => {
           onClick={() => setDate((e) => e.clone().add(1, "d"))}
           disabled={compareEqual(date, moment().add(15, "d"))}
         />
-        <DateText>Julio 2021</DateText>
+        <DateText>{`${date.format("MMM")} ${date.format("YYYY")}`}</DateText>
       </TurnHeader>
       <DaysContent>{turns && renderDays()}</DaysContent>
       <AlertDialog
