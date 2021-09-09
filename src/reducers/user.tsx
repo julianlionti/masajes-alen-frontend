@@ -51,6 +51,7 @@ export const login = createAsyncThunk<UserProps, AuthProvider>(
       const token = await fbUser.getIdToken();
       const { displayName, email, uid } = fbUser;
       user = { displayName, email, uid, token, admin: false };
+      console.log(user);
     } else {
       const isFb = provider instanceof FacebookAuthProvider;
       user = {
